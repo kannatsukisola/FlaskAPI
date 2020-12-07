@@ -9,7 +9,7 @@ from os import path
 _parser = configparser.ConfigParser()
 _config_file = path.join(path.dirname(__file__), "../../flask.cfg")
 
-assert path.exists(_config_file), f"全局配置文件 'flask.cfg' 缺失"
+assert path.exists(_config_file), "全局配置文件 'flask.cfg' 缺失"
 
 
 class Configuration:

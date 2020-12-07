@@ -14,7 +14,7 @@ def _check_parameter(arg):
     如果 arg 在请求参数中，返回 True， 否则返回 RequestParameterMissing 异常 
     """
     assert arg in request.args, \
-        RequestParameterMissing(f"`{arg}` not in request parameters")
+        RequestParameterMissing("`{arg}` not in request parameters".format(arg=arg))
     
     return True
 
