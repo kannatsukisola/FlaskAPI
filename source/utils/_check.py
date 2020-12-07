@@ -1,0 +1,29 @@
+#coding:utf8
+"""
+Purpose: 提供检查相关方法
+    * check_parameters 和 check_parameter: 检查请求是否包括需要的参数
+"""
+from flask import request
+
+from source.lib.exceptions import *
+
+# Done: 检验 post 方法中 request 的参数有效
+def _check_parameter(arg):
+    """检测请求的单个参数
+    
+    如果 arg 在请求参数中，返回 True， 否则返回 RequestParameterMissing 异常 
+    """
+    assert arg in request.args, \
+        RequestParameterMissing(f"`{arg}` not in request parameters")
+    
+    return True
+
+
+def check_parameters(*args):
+    """检测请求参数
+    """
+    for arg in args:
+        if isinstance(arg, str):
+            _check_parameter(arg)
+        else:
+            raise TypeError("args is not supported")
