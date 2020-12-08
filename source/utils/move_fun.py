@@ -30,3 +30,5 @@ def send_mark(point_x, point_y):
     time.sleep(2)
     move_to_point(point_x, point_y)
 
+if __name__ == "__main__":
+    send_mark()

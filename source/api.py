@@ -8,7 +8,8 @@ sys.path.append("..")
 from source.utils import SETTINGS
 from source.utils import _check
 from source.lib.locations import locations
-from source.utils.move_fun import send_mark
+# from source.utils.move_fun import send_mark, move_to_point
+
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = SETTINGS.get("APP_DEBUG", False)
@@ -44,9 +45,13 @@ def move():
     """
     location = _check.check_parameters("location")["location"]
     x, y = locations[location]
-    send_mark(x, y)
+    import os
+    from os import path
+    # 直接调用运送到点
+    os.system("python %s" % path.join(path.dirname(__file__), "utils/move_fun.py"))
 
     
 
 if __name__ == "__main__":
+    # global goal_pub
     app.run(port=SETTINGS["PORT"], host=SETTINGS["HOST"])
