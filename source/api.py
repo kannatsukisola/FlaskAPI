@@ -32,11 +32,8 @@ def home():
 def extract():
     """测试带参数请求是否成功
     """
-    _check.check_parameters("id")
-    result = jsonify({
-        "id": request.args["id"]
-    })
-    return result
+    result = _check.check_parameters("id", "book")
+    return jsonify(result)
     
 
 
