@@ -48,7 +48,9 @@ def move():
     import os
     from os import path
     # 直接调用运送到点
-    os.system("python %s" % path.join(path.dirname(__file__), "utils/move_fun.py"))
+    os.system("python %s -x %s -y %s" % (
+        path.join(path.dirname(__file__), "utils/move_fun.py", x, y
+    )))
 
     
 
