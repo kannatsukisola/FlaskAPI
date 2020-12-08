@@ -8,7 +8,7 @@ sys.path.append("..")
 from source.utils import SETTINGS
 from source.utils import _check
 from source.lib.locations import locations
-from source.utils.move_fun import send_mark
+from source.utils.move_fun import send_mark, move_to_point
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = SETTINGS.get("APP_DEBUG", False)
@@ -44,7 +44,22 @@ def move():
     """
     location = _check.check_parameters("location")["location"]
     x, y = locations[location]
-    send_mark(x, y)
+
+    # 直接调用运送到点
+    from visualization_msgs.msg import Marker
+    from visualization_msgs.msg import MarkerArray
+    import rospy
+    import math
+    from geometry_msgs.msg import PointStamped, PoseStamped
+    import actionlib
+    from move_base_msgs.msg import *
+    import time
+    global goal_pub
+    rospy.init_node('path_point_demo')
+    goal_pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size = 1)
+    time.sleep(2)
+    move_to_point(goal_pub, x, y)
+    # send_mark(x, y)
 
     
 

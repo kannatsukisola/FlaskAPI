@@ -13,7 +13,7 @@ from move_base_msgs.msg import *
 import time
 
 
-def move_to_point(point_x, point_y):           #移动到一个点
+def move_to_point(goal_pub, point_x, point_y):           #移动到一个点
     pose = PoseStamped()
     pose.header.frame_id = 'map'
     pose.header.stamp = rospy.Time.now()
