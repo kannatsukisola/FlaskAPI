@@ -23,10 +23,12 @@ def move_to_point(goal_pub, point_x, point_y):           #移动到一个点
     goal_pub.publish(pose)
 
 
-def send_mark(point_x, point_y):
+def send_mark(point_x=1.51060724258, point_y=0.143926501274):
     global goal_pub
     rospy.init_node('path_point_demo')
     goal_pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size = 1)
     time.sleep(2)
     move_to_point(point_x, point_y)
 
+if __name__ == "__main__":
+    send_mark()
