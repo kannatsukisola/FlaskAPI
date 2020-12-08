@@ -46,16 +46,6 @@ def move():
     x, y = locations[location]
 
     # 直接调用运送到点
-    from visualization_msgs.msg import Marker
-    from visualization_msgs.msg import MarkerArray
-    import rospy
-    import math
-    from geometry_msgs.msg import PointStamped, PoseStamped
-    import actionlib
-    from move_base_msgs.msg import *
-    import time
-    global goal_pub
-    rospy.init_node('path_point_demo')
     goal_pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size = 1)
     time.sleep(2)
     move_to_point(goal_pub, x, y)
@@ -64,4 +54,14 @@ def move():
     
 
 if __name__ == "__main__":
+    from visualization_msgs.msg import Marker
+    from visualization_msgs.msg import MarkerArray
+    import rospy
+    import math
+    from geometry_msgs.msg import PointStamped, PoseStamped
+    import actionlib
+    from move_base_msgs.msg import *
+    import time
+    # global goal_pub
+    rospy.init_node('path_point_demo')    
     app.run(port=SETTINGS["PORT"], host=SETTINGS["HOST"])
