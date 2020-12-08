@@ -7,6 +7,8 @@ import sys
 sys.path.append("..")
 from source.utils import SETTINGS
 from source.utils import _check
+from source.lib.locations import locations
+from source.utils.move_fun import send_mark
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = SETTINGS.get("APP_DEBUG", False)
@@ -27,7 +29,7 @@ def home():
     return result
 
 
-# TODO: 带参数请求
+# Done: 带参数请求
 @app.route("/args", methods=["GET", "POST"])
 def extract():
     """测试带参数请求是否成功
@@ -35,7 +37,16 @@ def extract():
     result = _check.check_parameters("id", "book")
     return jsonify(result)
     
+# TODO: 平衡车移动 API 接口
+@app.route("/move", methods=["GET", "POST"])
+def move():
+    """调用移动平衡车接口
+    """
+    location = _check.check_parameters("location")["location"]
+    x, y = locations[location]
+    send_mark(x, y)
 
+    
 
 if __name__ == "__main__":
     app.run(port=SETTINGS["PORT"], host=SETTINGS["HOST"])
