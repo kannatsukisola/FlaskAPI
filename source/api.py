@@ -52,7 +52,9 @@ def move():
         path.join(path.dirname(__file__), "utils/move_fun.py")
         , x, y
     ))
-
+    return jsonify({
+        "status": "Move to location %s" % location
+    })
     
 
 if __name__ == "__main__":
