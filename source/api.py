@@ -42,10 +42,10 @@ def extract():
 def move():
     """调用移动平衡车接口
     """
-    location = _check.check_parameters("location")
+    location = _check.check_parameters("location")["location"]
     x, y = locations[location]
     send_mark(x, y)
-    
+
     
 
 if __name__ == "__main__":
