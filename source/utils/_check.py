@@ -13,17 +13,21 @@ def _check_parameter(arg):
     
     如果 arg 在请求参数中，返回 True， 否则返回 RequestParameterMissing 异常 
     """
-    assert arg in request.args, \
+    assert arg in request.args or arg in request.form, \
         RequestParameterMissing("`{arg}` not in request parameters".format(arg=arg))
     
-    return True
+    result = {arg: request.args.get(arg) or request.form.get(arg)}
+    return result
 
 
 def check_parameters(*args):
     """检测请求参数
     """
+    result = {}
     for arg in args:
         if isinstance(arg, str):
-            _check_parameter(arg)
+            result.update(_check_parameter(arg))
         else:
             raise TypeError("args is not supported")
+    
+    return result
