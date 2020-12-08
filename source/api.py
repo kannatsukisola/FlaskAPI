@@ -55,5 +55,4 @@ def move():
 
 if __name__ == "__main__":
     # global goal_pub
-    rospy.init_node('path_point_demo')    
     app.run(port=SETTINGS["PORT"], host=SETTINGS["HOST"])
