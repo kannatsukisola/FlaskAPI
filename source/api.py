@@ -13,6 +13,13 @@ from source.utils.move_fun import send_mark, move_to_point
 
 import rospy
 import time
+from visualization_msgs.msg import Marker
+from visualization_msgs.msg import MarkerArray
+import rospy
+import math
+from geometry_msgs.msg import PointStamped, PoseStamped
+import actionlib
+from move_base_msgs.msg import *
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = SETTINGS.get("APP_DEBUG", False)
@@ -58,14 +65,6 @@ def move():
     
 
 if __name__ == "__main__":
-    from visualization_msgs.msg import Marker
-    from visualization_msgs.msg import MarkerArray
-    import rospy
-    import math
-    from geometry_msgs.msg import PointStamped, PoseStamped
-    import actionlib
-    from move_base_msgs.msg import *
-    import time
     # global goal_pub
     rospy.init_node('path_point_demo')    
     app.run(port=SETTINGS["PORT"], host=SETTINGS["HOST"])
