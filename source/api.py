@@ -49,7 +49,6 @@ def move():
     from os import path
     # 直接调用运送到点
     os.system("python %s" % path.join(path.dirname(__file__), "utils/move_fun.py"))
-    send_mark(x, y)
 
     
 

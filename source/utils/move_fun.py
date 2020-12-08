@@ -13,7 +13,7 @@ from move_base_msgs.msg import *
 import time
 
 
-def move_to_point(goal_pub, point_x, point_y):           #移动到一个点
+def move_to_point(point_x, point_y):           #移动到一个点
     pose = PoseStamped()
     pose.header.frame_id = 'map'
     pose.header.stamp = rospy.Time.now()
@@ -23,7 +23,7 @@ def move_to_point(goal_pub, point_x, point_y):           #移动到一个点
     goal_pub.publish(pose)
 
 
-def send_mark(point_x=1.51060724258, point_y=0.143926501274):
+def send_mark(point_x, point_y):
     global goal_pub
     rospy.init_node('path_point_demo')
     goal_pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size = 1)
