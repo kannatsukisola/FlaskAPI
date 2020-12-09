@@ -64,7 +64,7 @@ def move():
         
         # 直接调用每步到点
         for x, y in steps:
-            logger.info(f"进入点{x}, {y}")
+            logger.info("进入点{x}, {y}".format(x=x, y=y))
             os.system("python %s -x %s -y %s" % (
                 path.join(path.dirname(__file__), "utils/move_fun.py")
                 , x, y
