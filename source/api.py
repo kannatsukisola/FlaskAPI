@@ -105,7 +105,7 @@ def check():
     global counter, current_path
     # 连接任务列表写入任务数据
     connect = sqlite3.connect(path.join(path.dirname(__file__), "db/task.db"))
-    steps = locations[current_path]
+    path_points = locations[current_path]
     try:
         cursor = connect.cursor()
         cursor.execute("SELECT steps FROM tlist LIMIT 1;")
@@ -124,7 +124,7 @@ def check():
                 "message": "查询到数据，并清除数据"
             }
         else:
-            x,y = steps[counter]
+            x,y = path_points[counter]
             move_to_point(x, y)
             counter += 1
             result = {
