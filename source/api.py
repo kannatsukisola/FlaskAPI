@@ -24,6 +24,10 @@ app.config["host"] = SETTINGS["HOST"]
 
 logger = logging.getLogger(name=SETTINGS.get("App_NAME", "main"))
 
+# 全局变量，记录当前点位
+counter = 0
+current_path = 0
+
 #Done:连接测试
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -50,7 +54,7 @@ def move():
     """调用移动平衡车接口
     """
     # # 设置全局变量存储位置，用于检查阶段确认成功数量和位置所需步长值是否一直
-    # global location
+    global current_path
     # import ipdb; ipdb.set_trace()
     location = _check.check_parameters("location")["location"]
     steps = locations[location]
@@ -63,12 +67,15 @@ def move():
         connect.commit()
         
         # 直接调用每步到点
-        for x, y in steps:
-            logger.info("进入点{x}, {y}".format(x=x, y=y))
-            os.system("python %s -x %s -y %s" % (
-                path.join(path.dirname(__file__), "utils/move_fun.py")
-                , x, y
-            ))
+        x,y = steps[0]
+        move_to_point(x, y)
+        current_path = location
+        # for x, y in steps:
+        #     logger.info("进入点{x}, {y}".format(x=x, y=y))
+        #     os.system("python %s -x %s -y %s" % (
+        #         path.join(path.dirname(__file__), "utils/move_fun.py")
+        #         , x, y
+        #     ))
 
         return jsonify({
             "status": "Moving to location %s" % location
@@ -77,11 +84,16 @@ def move():
         raise Exception("没有到达目标点或者任务写入列表失败")
     finally:
         connect.close()
-    
+
+def move_to_point(pointx, pointy):
+    os.system("python %s -x %s -y %s" % (
+        path.join(path.dirname(__file__), "utils/move_fun.py")
+        , pointx, pointy
+    ))
 
 # TODO: 检查任务状态
 # 设置全局变量统计请求检查的次数
-counter = 0
+
 
 @app.route("/check", methods=["GET", "POST"])
 def check():
@@ -90,14 +102,15 @@ def check():
     检查任务步长值和最终数量值是否一直
     """
     # import ipdb; ipdb.set_trace()
-    global counter
+    global counter, current_path
     # 连接任务列表写入任务数据
     connect = sqlite3.connect(path.join(path.dirname(__file__), "db/task.db"))
+    steps = locations[current_path]
     try:
         cursor = connect.cursor()
         cursor.execute("SELECT steps FROM tlist LIMIT 1;")
         
-        counter += 1
+        
         # 计数数量和请求数量一致时删除记录，发送成功信息同时将计数变量归零
         steps = cursor.fetchone()[0]
         if steps == counter:
@@ -111,6 +124,9 @@ def check():
                 "message": "查询到数据，并清除数据"
             }
         else:
+            x,y = steps[counter]
+            move_to_point(x, y)
+            counter += 1
             result = {
                 "message": "查询到数据"
             }
