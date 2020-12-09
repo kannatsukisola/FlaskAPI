@@ -27,6 +27,7 @@ logger = logging.getLogger(name=SETTINGS.get("App_NAME", "main"))
 # 全局变量，记录当前点位
 counter = 0
 current_path = 0
+retry_times = 0
 
 #Done:连接测试
 @app.route("/", methods=["GET", "POST"])
@@ -77,14 +78,21 @@ def move():
         #         , x, y
         #     ))
 
-        return jsonify({
-            "status": "Moving to location %s" % location
+        result = jsonify({
+            "code": 200,
+            "msg": "Moving to location %s" % location
         })
     except:
-        raise Exception("没有到达目标点或者任务写入列表失败")
+        result = jsonify({
+            "code": 500,
+            "msg": "Request Failure"
+        })
+        # raise Exception("没有到达目标点或者任务写入列表失败")
     finally:
         connect.close()
+    return result
 
+# 小车移动到某个点位
 def move_to_point(pointx, pointy):
     os.system("python %s -x %s -y %s" % (
         path.join(path.dirname(__file__), "utils/move_fun.py")
@@ -102,20 +110,30 @@ def check():
     检查任务步长值和最终数量值是否一直
     """
     # import ipdb; ipdb.set_trace()
-    global counter, current_path
+    global counter, current_path, retry_times
     # 连接任务列表写入任务数据
     connect = sqlite3.connect(path.join(path.dirname(__file__), "db/task.db"))
     path_points = locations[current_path]
+    result_status = _check.check_parameters("result_status")["result_status"]
     try:
         cursor = connect.cursor()
         cursor.execute("SELECT steps FROM tlist LIMIT 1;")
         
+        if result_status == 3:
+            counter += 1
+            retry_times = 0
+        elif retry_times < 3:
+            retry_times += 1
+            x,y = path_points[counter]
+            move_to_point(x, y)
+            return jsonify({
+                "report": "retry to move current index {i} at {l} ({x}, {y})".format(i=counter, l=current_path, x=x, y=y)
+            })
         
         # 计数数量和请求数量一致时删除记录，发送成功信息同时将计数变量归零
         steps = cursor.fetchone()[0]
         if steps == counter:
             counter = 0
-
             requests.get(SETTINGS["STATUS_URL"])
             cursor.execute("DELETE FROM tlist;")
             logger.debug("请求成功删除所有数据信息")
@@ -124,7 +142,6 @@ def check():
                 "message": "查询到数据，并清除数据"
             }
         else:
-            counter += 1
             x,y = path_points[counter]
             move_to_point(x, y)
             result = {
