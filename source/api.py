@@ -124,9 +124,9 @@ def check():
                 "message": "查询到数据，并清除数据"
             }
         else:
+            counter += 1
             x,y = path_points[counter]
             move_to_point(x, y)
-            counter += 1
             result = {
                 "message": "查询到数据"
             }
