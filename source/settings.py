@@ -15,3 +15,7 @@ APP_NAME = "main"
 # Log Config
 LOG_ENABLED = True
 LOG_PATH = "log"
+
+
+# Status API-it's external API
+STATUS_URL = 'http://192.168.170.41:8086/face/changeRobotsCheckPointFlag/1'
