@@ -38,4 +38,4 @@ if __name__ == "__main__":
     parser.add_argument("-r", "--orientation", type=float, default=1, help="小车停止朝向")
 
     args = parser.parse_args()
-    send_mark(args.x, args.y)
+    send_mark(args.pointx, args.pointy)

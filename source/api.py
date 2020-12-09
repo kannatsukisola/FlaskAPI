@@ -49,9 +49,12 @@ def move():
     from os import path
     # 直接调用运送到点
     os.system("python %s -x %s -y %s" % (
-        path.join(path.dirname(__file__), "utils/move_fun.py", x, y
-    )))
-
+        path.join(path.dirname(__file__), "utils/move_fun.py")
+        , x, y
+    ))
+    return jsonify({
+        "status": "Move to location %s" % location
+    })
     
 
 if __name__ == "__main__":
