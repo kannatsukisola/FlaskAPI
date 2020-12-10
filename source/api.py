@@ -120,7 +120,7 @@ def check():
         cursor = connect.cursor()
         cursor.execute("SELECT steps FROM tlist LIMIT 1;")
         
-        if result_status == 3:
+        if result_status == "3":
             counter += 1
             retry_times = 0
         elif retry_times < 3:
