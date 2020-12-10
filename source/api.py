@@ -6,6 +6,7 @@ import os
 from os import path
 import sqlite3
 import requests
+import json
 
 import sys
 sys.path.append("..")
@@ -78,12 +79,12 @@ def move():
         #         , x, y
         #     ))
 
-        result = jsonify({
+        result = json.dumps({
             "code": 200,
             "msg": "Moving to location %s" % location
         })
     except:
-        result = jsonify({
+        result = json.dumps({
             "code": 500,
             "msg": "Request Failure"
         })
@@ -126,7 +127,7 @@ def check():
             retry_times += 1
             x,y = path_points[counter]
             move_to_point(x, y)
-            return jsonify({
+            return json.dumps({
                 "report": "retry to move current index {i} at {l} ({x}, {y})".format(i=counter, l=current_path, x=x, y=y)
             })
         
@@ -150,7 +151,7 @@ def check():
     finally:
         connect.close()
     
-    return jsonify(result)
+    return json.dumps(result)
 
 
 
