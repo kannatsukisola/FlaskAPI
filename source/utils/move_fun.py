@@ -31,7 +31,7 @@ def move_to_point(point_x, point_y, force_w):           #移动到一个点
         q = Quaternion(*q_angle)
         quaternions.append(q)
 
-    pose.pose.orientation = quaternions[force_w]
+    pose.pose.orientation.w = quaternions[force_w].w
     goal_pub.publish(pose)
 
 
