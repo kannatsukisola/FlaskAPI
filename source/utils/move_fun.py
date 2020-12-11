@@ -24,14 +24,10 @@ def move_to_point(point_x, point_y, force_w):           #移动到一个点
     pose.pose.position.y = point_y
 
     # 角度
-    quaternions = list()
-    euler_angles = (pi/2, pi, 3*pi/2, 0)
-    for angle in euler_angles:
-        q_angle = quaternion_from_euler(0, 0, angle, axes='sxyz')
-        q = Quaternion(*q_angle)
-        quaternions.append(q)
-
-    pose.pose.orientation.w = quaternions[force_w].w
+    quaternions = [(0, 1), (1, 0), (-0.707, 0.707), (0.707, 0.707)]
+    z,w = quaternions[force_w]
+    pose.pose.orientation.z = z
+    pose.pose.orientation.w = w
     goal_pub.publish(pose)
 
 
