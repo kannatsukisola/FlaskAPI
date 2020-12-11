@@ -46,7 +46,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Ros Balance Wheel Server")
     parser.add_argument("-x", "--pointx", type=float, help="小车移动的目的地 X 坐标轴")
     parser.add_argument("-y", "--pointy", type=float, help="小车移动的目的地 Y 坐标轴")
-    parser.add_argument("-r", "--orientation", type=float, default=1, help="小车停止朝向")
+    parser.add_argument("-r", "--orientation", type=int, default=1, help="小车停止朝向")
 
     args = parser.parse_args()
     send_mark(args.pointx, args.pointy, args.orientation)
