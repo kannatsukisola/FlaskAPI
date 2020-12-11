@@ -19,3 +19,4 @@ LOG_PATH = "log"
 
 # Status API-it's external API
 STATUS_URL = 'http://192.168.170.41:8086/face/changeRobotsCheckPointFlag/1'
+FAIED_URL = 'http://192.168.170.41:8086/face/changeRobotsCheckPointFlag/0'

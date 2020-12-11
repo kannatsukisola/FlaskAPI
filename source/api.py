@@ -69,8 +69,8 @@ def move():
         connect.commit()
         
         # 直接调用每步到点
-        x,y = steps[0]
-        move_to_point(x, y)
+        x,y, w = steps[0]
+        move_to_point(x, y, w)
         current_path = location
         # for x, y in steps:
         #     logger.info("进入点{x}, {y}".format(x=x, y=y))
@@ -94,10 +94,10 @@ def move():
     return result
 
 # 小车移动到某个点位
-def move_to_point(pointx, pointy):
-    os.system("python %s -x %s -y %s" % (
+def move_to_point(pointx, pointy, forcew):
+    os.system("python %s -x %s -y %s -r %s " % (
         path.join(path.dirname(__file__), "utils/move_fun.py")
-        , pointx, pointy
+        , pointx, pointy, forcew
     ))
 
 # TODO: 检查任务状态
@@ -125,11 +125,17 @@ def check():
             retry_times = 0
         elif retry_times < 3:
             retry_times += 1
-            x,y = path_points[counter]
-            move_to_point(x, y)
+            x,y, w = path_points[counter]
+            move_to_point(x, y, w)
             return json.dumps({
                 "report": "retry to move current index {i} at {l} ({x}, {y})".format(i=counter, l=current_path, x=x, y=y)
             })
+        elif retry_times >=3:
+            requests.get(SETTINGS["FAIED_URL"])
+            cursor.execute("DELETE FROM tlist;")
+            logger.debug("请求成功删除所有数据信息")
+            connect.commit()
+            return ""
         
         # 计数数量和请求数量一致时删除记录，发送成功信息同时将计数变量归零
         steps = cursor.fetchone()[0]
@@ -143,8 +149,8 @@ def check():
                 "message": "查询到数据，并清除数据"
             }
         else:
-            x,y = path_points[counter]
-            move_to_point(x, y)
+            x,y,w = path_points[counter]
+            move_to_point(x, y,w)
             result = {
                 "message": "查询到数据"
             }
