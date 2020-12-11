@@ -7,11 +7,13 @@ from visualization_msgs.msg import Marker
 from visualization_msgs.msg import MarkerArray
 import rospy
 import math
-from geometry_msgs.msg import PointStamped, PoseStamped
+from geometry_msgs.msg import PointStamped, PoseStamped, Quaternion
+from tf.transformations import quaternion_from_euler
 import actionlib
 from move_base_msgs.msg import *
 import time
 import argparse
+from math import pi
 
 
 def move_to_point(point_x, point_y, force_w):           #移动到一个点
@@ -20,7 +22,16 @@ def move_to_point(point_x, point_y, force_w):           #移动到一个点
     pose.header.stamp = rospy.Time.now()
     pose.pose.position.x = point_x
     pose.pose.position.y = point_y
-    pose.pose.orientation.w = force_w
+
+    # 角度
+    quaternions = list()
+    euler_angles = (pi/2, pi, 3*pi/2, 0)
+    for angle in euler_angles:
+        q_angle = quaternion_from_euler(0, 0, angle, axes='sxyz')
+        q = Quaternion(*q_angle)
+        quaternions.append(q)
+
+    pose.pose.orientation = quaternions[force_w]
     goal_pub.publish(pose)
 
 
