@@ -24,7 +24,7 @@ def move_to_point(point_x, point_y, force_w):           #移动到一个点
     pose.pose.position.y = point_y
 
     # 角度
-    quaternions = [(0, 1), (1, 0), (-0.707, 0.707), (0.707, 0.707)]
+    quaternions = [(0, 1), (1, 0), (0.707, 0.707), (0.707, -0.707)]
     z,w = quaternions[force_w]
     pose.pose.orientation.z = z
     pose.pose.orientation.w = w
