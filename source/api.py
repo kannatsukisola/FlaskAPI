@@ -59,7 +59,7 @@ def move():
     global current_path
     # import ipdb; ipdb.set_trace()
     location = _check.check_parameters("location")["location"]
-    steps = locations[location]
+    steps = locations[location]['point']
     # 连接任务列表写入任务数据
     connect = sqlite3.connect(path.join(path.dirname(__file__), "db/task.db"))
     try:
@@ -114,7 +114,7 @@ def check():
     global counter, current_path, retry_times
     # 连接任务列表写入任务数据
     connect = sqlite3.connect(path.join(path.dirname(__file__), "db/task.db"))
-    path_points = locations[current_path]
+    path_points = locations[current_path]['point']
     result_status = _check.check_parameters("result_status")["result_status"]
     try:
         cursor = connect.cursor()
