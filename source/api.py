@@ -131,7 +131,7 @@ def check():
                 "report": "retry to move current index {i} at {l} ({x}, {y})".format(i=counter, l=current_path, x=x, y=y)
             })
         elif retry_times >=3:
-            requests.get(SETTINGS["FAIED_URL"])
+            requests.get(SETTINGS["FAIED_URL"]+'/'+current_path)
             cursor.execute("DELETE FROM tlist;")
             logger.debug("请求成功删除所有数据信息")
             connect.commit()
@@ -141,7 +141,7 @@ def check():
         steps = cursor.fetchone()[0]
         if steps == counter:
             counter = 0
-            requests.get(SETTINGS["STATUS_URL"])
+            requests.get(SETTINGS["STATUS_URL"]+'/'+current_path)
             cursor.execute("DELETE FROM tlist;")
             logger.debug("请求成功删除所有数据信息")
             connect.commit()
